@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBuddy - Study Groups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: black;
+            min-height: 100vh;
+            color: white;
+            padding-top: 70px;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        .create-group-btn {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0.8rem 1.5rem;
+            background: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .create-group-btn:hover {
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .filter-btn.active {
+            background: #FFD700;
+            color: #333;
+        }
+
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .group-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+
+        .group-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .group-title {
+            font-size: 1.25rem;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+
+        .group-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .group-meta {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .members {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .member-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-right: -10px;
+        }
+
+        .members-count {
+            margin-left: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .join-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .join-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .group-schedule {
+            margin: 1rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .create-group-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .header {
+                text-align: center;
+            }
+            
+            .create-group-btn {
+                position: static;
+                transform: none;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">StudyBuddy</a>
+            <ul class="nav-links">
+                <li><a href="find-buddy.html">Find Buddy</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="groups.html">Study Groups</a></li>
+                <li><a href="doubts.html">Ask Doubts</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Study Groups</h1>
+            <p>Join or create study groups to learn together</p>
+            <button class="create-group-btn">Create New Group</button>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search for study groups...">
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active">All Groups</button>
+            <button class="filter-btn">Mathematics</button>
+            <button class="filter-btn">Physics</button>
+            <button class="filter-btn">Chemistry</button>
+            <button class="filter-btn">Computer Science</button>
+            <button class="filter-btn">My Groups</button>
+            <button class="filter-btn">Active Now</button>
+        </div>
+
+        <div class="groups-grid">
+            <!-- Study Group Card 1 -->
+            <div class="group-card">
+                <div class="group-header">
+                    <div>
+                        <h3 class="group-title">Advanced Calculus Study Group</h3>
+                        <div class="group-tags">
+                            <span class="tag">Mathematics</span>
+                            <span class="tag">Advanced</span>
+                        </div>
+                    </div>
+                    <span class="status-badge">Active Now</span>
+                </div>
+
+                <p>A group dedicated to mastering advanced calculus concepts through collaborative learning.</p>
+
+                <div class="group-schedule">
+                    <div class="schedule-item">
+                        <span>Next Session:</span>
+                        <span>Today, 3:00 PM</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span>Frequency:</span>
+                        <span>Twice a week</span>
+                    </div>
+                </div>
+
+                <div class="members">
+                    <img src="./dhruv_rathee.jpg" alt="Member" class="member-avatar">
+                    <img src="./deepak_kalal.jpg" alt="Member" class="member-avatar">
+                    <img src="./rajat_dalal.jpg" alt="Member" class="member-avatar">
+                    <span class="members-count">+5 more</span>
+                </div>
+
+                <div class="group-meta">
+                    <span>8 Members</span>
+                    <span>4.8 ★ Rating</span>
+                </div>
+
+                <button class="join-btn">Join Group</button>
+            </div>
+
+            <!-- Study Group Card 2 -->
+            <div class="group-card">
+                <div class="group-header">
+                    <div>
+                        <h3 class="group-title">Python Programming Circle</h3>
+                        <div class="group-tags">
+                            <span class="tag">Computer Science</span>
+                            <span class="tag">Programming</span>
+                        </div>
+                    </div>
+                    <span class="status-badge">Starting Soon</span>
+                </div>
+
+                <p>Learn Python programming through hands-on projects and coding challenges.</p>
+
+                <div class="group-schedule">
+                    <div class="schedule-item">
+                        <span>Next Session:</span>
+                        <span>Tomorrow, 5:00 PM</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span>Frequency:</span>
+                        <span>Weekly</span>
+                    </div>
+                </div>
+
+                <div class="members">
+                    <img src="./savita.png" alt="Member" class="member-avatar">
+                    <img src="./vivek.jpg" alt="Member" class="member-avatar">
+                    <img src="./anand.jpeg" alt="Member" class="member-avatar">
+                    <span class="members-count">+7 more</span>
+                </div>
+
+                <div class="group-meta">
+                    <span>10 Members</span>
+                    <span>4.9 ★ Rating</span>
+                </div>
+
+                <button class="join-btn">Join Group</button>
+            </div>
+
+            <!-- Study Group Card 3 -->
+            <div class="group-card">
+                <div class="group-header">
+                    <div>
+                        <h3 class="group-title">Quantum Physics Discussion</h3>
+                        <div class="group-tags">
+                            <span class="tag">Physics</span>
+                            <span class="tag">Advanced</span>
+                        </div>
+                    </div>
+                    <span class="status-badge">Upcoming</span>
+                </div>
+
+                <p>Deep dive into quantum mechanics and modern physics concepts.</p>
+
+                <div class="group-schedule">
+                    <div class="schedule-item">
+                        <span>Next Session:</span>
+                        <span>Friday, 4:00 PM</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span>Frequency:</span>
+                        <span>Bi-weekly</span>
+                    </div>
+                </div>
+
+                <div class="members">
+                    <img src="./ankit.jpeg" alt="Member" class="member-avatar">
+                    <img src="./deepak_kalal.jpg" alt="Member" class="member-avatar">
+                    <img src="./dhruv_rathee.jpg" alt="Member" class="member-avatar">
+                    <span class="members-count">+4 more</span>
+                </div>
+
+                <div class="group-meta">
+                    <span>7 Members</span>
+                    <span>4.7 ★ Rating</span>
+                </div>
+
+                <button class="join-btn">Join Group</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

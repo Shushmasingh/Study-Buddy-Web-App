@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBuddy - Personal Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: black;
+            min-height: 100vh;
+            color: white;
+            padding-top: 70px;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #FFD700;
+        }
+
+        .notification-bell {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .notification-bell:hover {
+            transform: scale(1.1);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: #FFD700;
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#FFD700 var(--progress), rgba(255, 255, 255, 0.1) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 1rem auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .course-info {
+            flex: 1;
+            margin-left: 1rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress {
+            height: 100%;
+            background: #FFD700;
+            width: var(--progress);
+            transition: width 0.3s ease;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .time-badge {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            color: #FFD700;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            padding: 0.8rem 1.5rem;
+            background: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .calendar-day.active {
+            background: #FFD700;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">StudyBuddy</a>
+            <ul class="nav-links">
+                <li><a href="find-buddy.html">Find Buddy</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="groups.html">Study Groups</a></li>
+                <li><a href="doubts.html">Ask Doubts</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <div class="user-profile">
+                <img src="./Sonu.jpeg.webp" alt="Profile" class="user-avatar">
+                <div>
+                    <h1>Welcome back, Sonu IAS !</h1>
+                    <p>Keep up the great work! 🌟</p>
+                </div>
+            </div>
+            <div class="notification-bell">🔔</div>
+        </div>
+
+        <div class="quick-actions">
+            <button class="action-btn">Join Study Group</button>
+            <button class="action-btn">Start New Course</button>
+            <button class="action-btn">Ask a Question</button>
+            <button class="action-btn">Find Study Buddy</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="main-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">My Progress</h2>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">85%</div>
+                            <div class="stat-label">Course Completion</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Study Sessions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Questions Asked</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">4.8</div>
+                            <div class="stat-label">Rating</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">My Courses</h2>
+                        <a href="courses.html">View All</a>
+                    </div>
+                    <div class="course-item">
+                        <img src="./sex_education.jpg" alt="Course" style="border-radius: 10px;" width="100px">
+                        <div class="course-info">
+                            <h3>Sex Education</h3>
+                            <div class="progress-bar">
+                                <div class="progress" style="--progress: 75%"></div>
+                            </div>
+                        </div>
+                        <span>75%</span>
+                    </div>
+                    <div class="course-item">
+                        <img src="./reproductive.jpg" alt="Course" style="border-radius: 10px;" width="100px">
+                        <div class="course-info">
+                            <h3>Reproduction</h3>
+                            <div class="progress-bar">
+                                <div class="progress" style="--progress: 60%"></div>
+                            </div>
+                        </div>
+                        <span>60%</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Achievements</h2>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-icon">🏆</span>
+                        <div>
+                            <h3>Course Completion</h3>
+                            <p>Completed Basic Mathematics</p>
+                        </div>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-icon">⭐</span>
+                        <div>
+                            <h3>Top Contributor</h3>
+                            <p>Helped 10 students this week</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Upcoming Sessions</h2>
+                    </div>
+                    <div class="schedule-item">
+                        <div>
+                            <h3>Calculus Group Study</h3>
+                            <p>with Math Group</p>
+                        </div>
+                        <span class="time-badge">3:00 PM</span>
+                    </div>
+                    <div class="schedule-item">
+                        <div>
+                            <h3>Physics Tutorial</h3>
+                            <p>Chapter 5 Review</p>
+                        </div>
+                        <span class="time-badge">5:00 PM</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Study Streak</h2>
+                    </div>
+                    <div class="progress-circle" style="--progress: 85%">
+                        7 Days
+                    </div>
+                    <p style="text-align: center; margin-top: 1rem;">Keep going! You're on a roll!</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Study Calendar</h2>
+                    </div>
+                    <div class="calendar">
+                        <!-- Calendar days -->
+                        <div class="calendar-day">1</div>
+                        <div class="calendar-day">2</div>
+                        <div class="calendar-day">3</div>
+                        <div class="calendar-day active">4</div>
+                        <div class="calendar-day">5</div>
+                        <div class="calendar-day">6</div>
+                        <div class="calendar-day">7</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

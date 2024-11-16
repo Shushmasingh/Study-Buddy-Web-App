@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBuddy - Sign Up</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: black;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .signup-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h1 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .interest-checkbox {
+            display: none;
+        }
+
+        .interest-label {
+            display: block;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interest-checkbox:checked + .interest-label {
+            background: #FFD700;
+            color: #333;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: #FFD700;
+            color: #333;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: white;
+        }
+
+        .form-footer a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="form-header">
+            <h1>Create Account</h1>
+            <p>Join our community of learners</p>
+        </div>
+
+        <form>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" placeholder="Enter first name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" placeholder="Enter last name" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Create password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="education">Education Level</label>
+                    <select id="education" required>
+                        <option value="">Select Level</option>
+                        <option value="highschool">High School</option>
+                        <option value="undergraduate">Undergraduate</option>
+                        <option value="graduate">Graduate</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="studyPreference">Study Preference</label>
+                    <select id="studyPreference" required>
+                        <option value="">Select Preference</option>
+                        <option value="individual">Individual</option>
+                        <option value="group">Group Study</option>
+                        <option value="both">Both</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Interests</label>
+                    <div class="interests-grid">
+                        <input type="checkbox" id="math" class="interest-checkbox">
+                        <label for="math" class="interest-label">Mathematics</label>
+
+                        <input type="checkbox" id="physics" class="interest-checkbox">
+                        <label for="physics" class="interest-label">Physics</label>
+
+                        <input type="checkbox" id="chemistry" class="interest-checkbox">
+                        <label for="chemistry" class="interest-label">Chemistry</label>
+
+                        <input type="checkbox" id="biology" class="interest-checkbox">
+                        <label for="biology" class="interest-label">Biology</label>
+
+                        <input type="checkbox" id="cs" class="interest-checkbox">
+                        <label for="cs" class="interest-label">Computer Science</label>
+
+                        <input type="checkbox" id="language" class="interest-checkbox">
+                        <label for="language" class="interest-label">Languages</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Create Account</button>
+
+            <div class="form-footer">
+                <p>Already have an account? <a href="login.html">Login</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBuddy - Courses</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: black;
+            min-height: 100vh;
+            color: white;
+            padding-top: 70px;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .filter-btn.active {
+            background: #FFD700;
+            color: #333;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .course-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .course-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        .course-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .instructor {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .instructor img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .progress {
+            height: 100%;
+            background: #FFD700;
+            border-radius: 3px;
+            width: var(--progress);
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .enroll-btn {
+            padding: 0.8rem 1.5rem;
+            background: #FFD700;
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .enroll-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .sort-dropdown {
+            margin-left: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sort-select {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #FFD700;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo">StudyBuddy</a>
+            <ul class="nav-links">
+                <li><a href="find-buddy.html">Find Buddy</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="groups.html">Study Groups</a></li>
+                <li><a href="doubts.html">Ask Doubts</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Explore Courses</h1>
+            <p>Discover courses that match your learning goals</p>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search for courses...">
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active">All Courses</button>
+            <button class="filter-btn">Mathematics</button>
+            <button class="filter-btn">Physics</button>
+            <button class="filter-btn">Chemistry</button>
+            <button class="filter-btn">Computer Science</button>
+            <button class="filter-btn">Biology</button>
+            <div class="sort-dropdown">
+                <select class="sort-select">
+                    <option>Most Popular</option>
+                    <option>Newest First</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Highest Rated</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="course-grid">
+            <!-- Course Card 1 -->
+            <div class="course-card">
+                <img src="./sex_education.jpg" alt="Course" class="course-image">
+                <div class="course-content">
+                    <span class="course-tag">Biology</span>
+                    <h3 class="course-title">Sex Education</h3>
+                    <div class="course-details">
+                        <span>12 weeks</span>
+                        <span>36 lessons</span>
+                        <div class="rating">
+                            <span>4.8</span>
+                            <span>★</span>
+                        </div>
+                    </div>
+                    <div class="instructor">
+                        <img src="./ankit.jpeg" alt="Instructor">
+                        <span>Dr. Ankit Kumar</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="--progress: 75%"></div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$49.99</span>
+                        <button class="enroll-btn">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 2 -->
+            <div class="course-card">
+                <img src="./reproductive.jpg" alt="Course" class="course-image">
+                <div class="course-content">
+                    <span class="course-tag">Biology</span>
+                    <h3 class="course-title">Reproduction</h3>
+                    <div class="course-details">
+                        <span>10 weeks</span>
+                        <span>30 lessons</span>
+                        <div class="rating">
+                            <span>4.9</span>
+                            <span>★</span>
+                        </div>
+                    </div>
+                    <div class="instructor">
+                        <img src="./anand.jpeg" alt="Instructor">
+                        <span>Prof. Anand Raj</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="--progress: 60%"></div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$59.99</span>
+                        <button class="enroll-btn">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 3 -->
+            <div class="course-card">
+                <img src="./web_dev.jpg" alt="Course" class="course-image">
+                <div class="course-content">
+                    <span class="course-tag">Computer Science</span>
+                    <h3 class="course-title">Web Development</h3>
+                    <div class="course-details">
+                        <span>8 weeks</span>
+                        <span>24 lessons</span>
+                        <div class="rating">
+                            <span>4.7</span>
+                            <span>★</span>
+                        </div>
+                    </div>
+                    <div class="instructor">
+                        <img src="./dhruv_rathee.jpg" alt="Instructor">
+                        <span>Prof. Dhruv Rathee</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="--progress: 40%"></div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$39.99</span>
+                        <button class="enroll-btn">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 4 -->
+            <div class="course-card">
+                <img src="./organic.jpg" alt="Course" class="course-image">
+                <div class="course-content">
+                    <span class="course-tag">Chemistry</span>
+                    <h3 class="course-title">Organic Chemistry</h3>
+                    <div class="course-details">
+                        <span>15 weeks</span>
+                        <span>45 lessons</span>
+                        <div class="rating">
+                            <span>4.6</span>
+                            <span>★</span>
+                        </div>
+                    </div>
+                    <div class="instructor">
+                        <img src="./savita.png" alt="Instructor">
+                        <span>Dr. Savita</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="--progress: 25%"></div>
+                    </div>
+                    <div class="course-footer">
+                        <span class="price">$69.99</span>
+                        <button class="enroll-btn">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
